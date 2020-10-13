@@ -60,11 +60,14 @@ module Spree
           end
 
           def collection
-            Spree::Review.approved.where(product: @product)
+            return Spree::Review.approved.where(product: @product) if @product
+
+            # for security reason only return current user's product questions
+            Spree::Review.where(user_id: spree_current_user) if params[:user_id]
           end
 
           def load_product
-            @product = Spree::Product.friendly.find(params[:product_id])
+            @product = Spree::Product.friendly.where(id: params[:product_id]).first
           end
 
           def permitted_review_attributes
@@ -88,7 +91,6 @@ module Spree
             #   render_error_payload(result.error)
             # end
           end
-
 
         end
       end
