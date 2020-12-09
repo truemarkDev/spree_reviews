@@ -12,4 +12,4 @@ module Spree::ProductsControllerDecorator
 end
 
 # TODO find better way to handle (uninitialized constant Spree::ProductsController) instead of rescuing with nil
-::Spree::ProductsController.prepend(Spree::ProductsControllerDecorator) rescue nil
+# ::Spree::ProductsController.prepend(Spree::ProductsControllerDecorator) rescue nil
