@@ -40,9 +40,12 @@ module Spree
             # authorixe! :update, @review
             @review.ip_address = request.remote_ip
             @review.locale = I18n.locale.to_s if Spree::Reviews::Config[:track_locale]
-            @review = Spree::Review.update(review_params)
+            if @review.update(review_params)
 
-            render_serialized_payload {serialize_resource(@review)}
+              render_serialized_payload {serialize_resource(@review)}
+            else
+              render_error_payload(product_question.errors)
+            end
           end
 
           private
