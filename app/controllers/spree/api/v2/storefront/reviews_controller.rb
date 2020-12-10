@@ -6,7 +6,7 @@ module Spree
           include Spree::Api::V2::CollectionOptionsHelpers
 
           before_action :load_product, only: [:index, :create, :update]
-          before_action :load_review, only: [:update]
+          before_action :load_review, only: [:update, :destroy]
 
           def index
             render_serialized_payload {serialize_collection(paginated_collection)}
@@ -45,6 +45,16 @@ module Spree
               render_serialized_payload {serialize_resource(@review)}
             else
               render_error_payload(product_question.errors)
+            end
+          end
+
+          def destroy
+            # TODO: fix permission
+            # authorize! :destroy, @review
+            if @review.destroy
+              render_serialized_payload { serialize_resource(@review) }
+            else
+              render_error_payload('Something went wrong')
             end
           end
 
