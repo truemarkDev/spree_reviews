@@ -5,7 +5,8 @@ module Spree
         class ReviewsController < ::Spree::Api::V2::BaseController
           include Spree::Api::V2::CollectionOptionsHelpers
 
-          before_action :load_product, only: [:index, :create]
+          before_action :load_product, only: [:index, :create, :update]
+          before_action :load_review, only: [:update]
 
           def index
             render_serialized_payload {serialize_collection(paginated_collection)}
@@ -18,7 +19,6 @@ module Spree
           def create
             # TODO move to service
             # result = create_service.call(user: spree_current_user, review_params: review_params, product: @product, ip_address: request.remote_ip)
-
             params[:review][:rating].sub!(/\s*[^0-9]*\z/, '') unless params[:review][:rating].blank?
 
             @review = Spree::Review.new(review_params)
@@ -31,6 +31,18 @@ module Spree
             # authorize! :create, @review
 
             render_result(@review)
+          end
+
+          def update
+            params[:review][:rating].sub!(/\s*[^0-9]*\z/, '') unless params[:review][:rating].blank?
+
+            # TODO: fix permission
+            # authorixe! :update, @review
+            @review.ip_address = request.remote_ip
+            @review.locale = I18n.locale.to_s if Spree::Reviews::Config[:track_locale]
+            @review = Spree::Review.update(review_params)
+
+            render_serialized_payload {serialize_resource(@review)}
           end
 
           private
@@ -68,6 +80,10 @@ module Spree
 
           def load_product
             @product = Spree::Product.friendly.where(id: params[:product_id]).first
+          end
+
+          def load_review
+            @review = Spree::Review.find_by(id: params[:id])
           end
 
           def permitted_review_attributes
