@@ -19,7 +19,7 @@ Spree::Core::Engine.add_routes do
     namespace :v2 do
       namespace :storefront do
         resources :products, only: [] do
-          resources :reviews, only: [:index, :create]
+          resources :reviews, only: [:index, :create, :update]
         end
 
         namespace :account do
