@@ -43,6 +43,44 @@ Now you should be able to boot up your server with:
 That's all!
 
 ---
+## API Endpoints
+
+### Reviews V2
+
+- GET `/api/v2/storefront/products/:product_id/reviews` - returns list of reviews for a product
+
+- POST `/api/v2/storefront/products/:product_id/reviews` - creates new review for a product
+
+    payload:
+    ```json
+    {
+        "review": {
+            "rating": "4",
+            "title": "Really Good",
+            "review": "I really like the product. It was as expected",
+            "name": "user1",
+            "show_identifier": false
+        }
+    }
+    ```
+- PATCH `/api/v2/storefront/products/:product_id/reviews/:id` - Update review for product
+
+    payload:
+    ```json
+    {
+        "review": {
+            "rating": "4",
+            "title": "Really Good",
+            "review": "I really like the product. It was as expected",
+            "name": "user1",
+            "show_identifier": false
+        }
+    }
+    ```
+- DELETE `/api/v2/storefront/products/:product_id/reviews/:id`
+
+
+---
 
 ## Usage
 
