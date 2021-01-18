@@ -2,7 +2,7 @@ module Spree
   module Api
     module V2
       module Storefront
-        class ReviewsController < ::Spree::Api::V2::BaseController
+        class ReviewsController < ::Spree::Api::V2::ResourceController
           include Spree::Api::V2::CollectionOptionsHelpers
 
           before_action :load_product, only: [:index, :create, :update]
